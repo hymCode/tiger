@@ -1,0 +1,96 @@
+﻿<!doctype html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+    <title>tiger</title>
+    <style type="text/css">
+    .tb {width: 50px; height: 50px; float: left; background-color: gray; margin: 5px 5px;}
+    .blank {width: 50px; height: 50px; float: left; background-color: white; margin: 5px 5px;}
+    .highlight{background-color: red}
+    </style>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+            var i = 0;
+            var timer;
+            var intervalTime = 100;
+            var str = "01247653";
+            var cashInfo = [2,5,10,20,100,500,1000,5000];
+            var jqObj = $('.tb');
+            var num = jqObj.length;
+
+            function start(){
+                render();
+                timer = setInterval(loop,intervalTime);
+            }
+
+            function render(){
+                cashInfo.sort(function(a,b){
+                    return Math.random()>.5 ? -1 : 1;
+                });
+                for (var i = 0; i < num; i++) {
+                    jqObj.eq(i).html(cashInfo[i] + '块');
+                }
+            }
+
+            function loop(){
+                jqObj.removeClass('highlight');
+                jqObj.eq(str.charAt(i%num)).addClass('highlight');
+                clearInterval(timer);
+                if ( !( intervalTime > 300 && (jqObj.eq(str.charAt(i%num)).html() == getNum()) )  ) {
+                    intervalTime += parseInt(Math.random()*(20-10)+10);
+                    timer = setInterval(loop, intervalTime);
+                }
+                i++;
+            }
+
+            function getNum(){
+                if (Math.random() <.01) {return 5000 + '块';}
+                if (Math.random() <.03) {return 1000 + '块';}
+                if (Math.random() <.08) {return 500 + '块';}
+                if (Math.random() <.10) {return 100 + '块';}
+                if (Math.random() <.20) {return 20 + '块';}
+                if (Math.random() <.50) {return 10 + '块';}
+                if (Math.random() <.80) {return 5 + '块';}
+                return 2 + '块';
+            }
+
+            $('#start').on('click', function(event) {
+                event.preventDefault();
+                /* Act on the event */
+                stop();
+                start();
+            })
+
+            function stop(){
+                if (timer) {clearInterval(timer)};
+                intervalTime = 10;
+            }
+            $('#stop').on('click', function(event) {
+                event.preventDefault();
+                /* Act on the event */
+                stop();
+            });
+
+            render();
+        })
+    </script>
+</head>
+<body>
+    <h1>林金同学，请抽出你这个月的零花钱</h1>
+    <div class="tb">5</div>
+    <div class="tb">5000</div>
+    <div class="tb">500</div>
+    <br style="clear: both"/>
+    <div class="tb">10</div>
+    <div class="blank"></div>
+    <div class="tb">100</div>
+    <br style="clear: both"/>
+    <div class="tb">1000</div>
+    <div class="tb">2</div>
+    <div class="tb">20</div>
+    <button type="button" id="start">START</button>
+    <!-- <button type="button" id="stop">STOP</button> -->
+</body>
+</html>
